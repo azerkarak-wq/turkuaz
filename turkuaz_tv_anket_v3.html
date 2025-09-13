@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Turkuaz TV İzleyici Anketi</title>
+  <style>
+    :root{
+      --bg:#0b0f1a;
+      --surface:#0f1626;
+      --card:#121a2b;
+      --ink:#e9f0ff;
+      --muted:#b7c3e0;
+      --accent:#5cb3ff;
+      --accent-2:#7bd389;
+      --danger:#ff6b6b;
+      --focus: 0 0 0 3px rgba(92,179,255,.35);
+      --ring: 0 20px 60px rgba(0,0,0,.45);
+      --line: rgba(255,255,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 800px at 10% -10%, #1b2540 0%, transparent 60%),
+        radial-gradient(1200px 800px at 110% 10%, #0f1830 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, #0a0f19 100%);
+      line-height:1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing:.2px;
+    }
+    .wrap{max-width:980px;margin:min(6vw,48px) auto;padding:0 20px}
+    header{
+      text-align:center;margin-bottom:28px;
+    }
+    .brand{
+      display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:10px;
+    }
+    .logo{
+      width:64px;height:64px;border-radius:16px;
+      display:inline-grid;place-items:center;
+      background:conic-gradient(from 180deg at 50% 50%, var(--accent), var(--accent-2), var(--accent));
+      color:#06131e;font-weight:800;font-size:24px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25), 0 0 0 1px rgba(255,255,255,.08) inset;
+    }
+    h1{font-size:clamp(24px,3vw,34px);margin:0}
+    .sub{color:var(--muted);margin:8px 0 0}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--ring);
+      padding:22px;
+    }
+    .section-title{
+      font-weight:800;margin:10px 0 14px;font-size:18px;
+      display:flex;align-items:center;gap:10px;
+    }
+    .section-title .dot{
+      width:8px;height:8px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 4px rgba(123,211,137,.18);
+    }
+    .grid{display:grid;gap:18px;grid-template-columns:1fr}
+    .grid-2{grid-template-columns:1fr}
+    @media (min-width:760px){ .grid-2{grid-template-columns:1fr 1fr} }
+    label{display:block;font-weight:650;margin-bottom:6px}
+    .req{color:var(--accent);font-weight:800;margin-left:4px}
+    input[type="text"],input[type="email"],select,textarea{
+      width:100%;padding:12px 14px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(4,10,24,.5);
+      color:var(--ink);
+      outline:none; transition: box-shadow .15s ease, border-color .15s ease;
+    }
+    textarea{min-height:120px;resize:vertical}
+    input::placeholder, textarea::placeholder{color:rgba(255,255,255,.45)}
+    input:focus,textarea:focus,select:focus{box-shadow:var(--focus);border-color:transparent}
+    fieldset{border:0;padding:0;margin:0}
+    .inline{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:999px;cursor:pointer;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      user-select:none;font-weight:550;
+    }
+    .chip input{accent-color:var(--accent)}
+    .muted{color:var(--muted)}
+    .hidden{display:none !important}
+    .hr{height:1px;background:var(--line);margin:8px 0}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:10px}
+    button{
+      border:0;border-radius:12px;padding:12px 18px;font-weight:800;
+      cursor:pointer;transition: transform .06s ease, box-shadow .15s ease;
+    }
+    .primary{background:var(--accent);color:#001021;box-shadow:0 10px 24px rgba(92,179,255,.25)}
+    .primary:active{transform:translateY(1px)}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--ink)}
+    .danger{background:var(--danger);color:#190a0a}
+    .note{
+      border-left:4px solid var(--accent);
+      padding:10px 12px;background:rgba(78,168,255,.08);
+      color:var(--ink);border-radius:8px;margin:10px 0 0;
+    }
+    footer{color:var(--muted);text-align:center;font-size:13px;margin-top:18px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .error{color:var(--danger);font-size:13px;margin-top:6px}
+    .success{
+      display:none;margin-top:14px;padding:12px;border-radius:12px;
+      background:rgba(123,211,137,.12);border:1px solid rgba(123,211,137,.4);
+      color:#d8ffe0
+    }
+    .counter{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+    .required-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+    .kicker{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">TT</div>
+        <div>
+          <div class="kicker">İzleyici Anketi</div>
+          <h1>Turkuaz TV</h1>
+        </div>
+      </div>
+      <p class="sub">Geri bildiriminiz yayınlarımızı geliştirmemize yardımcı olur. Lütfen 2 dakikanızı ayırın.</p>
+      <div class="required-badge"><span class="req">•</span> Zorunlu alan</div>
+    </header>
+
+    <form id="anketForm" class="card" novalidate>
+      <!-- Kişisel Bilgiler -->
+      <div class="section-title"><span class="dot"></span> Kişisel Bilgiler</div>
+      <div class="grid grid-2">
+        <!-- Ad Soyad -->
+        <div class="field">
+          <label for="adsoyad">1) Adınız ve Soyadınız <span class="req" aria-hidden="true">*</span></label>
+          <input id="adsoyad" name="adsoyad" type="text" required placeholder="Örn. Evrens Özdemir" autocomplete="name" />
+          <div class="error" id="err-adsoyad" role="alert" aria-live="polite"></div>
+        </div>
+        <!-- Email -->
+        <div class="field">
+          <label for="email">2) E-mail Adresiniz <span class="req" aria-hidden="true">*</span></label>
+          <input id="email" name="email" type="email" required placeholder="ornek@eposta.com" autocomplete="email" />
+          <div class="error" id="err-email" role="alert" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <!-- Yaş -->
+      <div class="field">
+        <label for="yas">3) Kaç Yaşındasınız? <span class="req" aria-hidden="true">*</span></label>
+        <select id="yas" name="yas" required>
+          <option value="" selected disabled>Seçiniz</option>
+          <option>18 yaş altı</option>
+          <option>18–25</option>
+          <option>26–35</option>
+          <option>36–45</option>
+          <option>46–60</option>
+          <option>60+</option>
+        </select>
+        <div class="error" id="err-yas" role="alert" aria-live="polite"></div>
+      </div>
+
+      <div class="hr"></div>
+
+      <!-- İzlediniz mi -->
+      <div class="section-title"><span class="dot"></span> İzleme Durumu</div>
+      <fieldset class="field">
+        <legend><label>4) Daha önce Turkuaz TV’yi izlediniz mi? <span class="req" aria-hidden="true">*</span></label></legend>
+        <div class="inline">
+          <label class="chip"><input type="radio" name="izledi" value="Evet" required /> Evet</label>
+          <label class="chip"><input type="radio" name="izledi" value="Hayır" /> Hayır</label>
+        </div>
+        <div class="error" id="err-izledi" role="alert" aria-live="polite"></div>
+
+        <!-- Koşullu alanlar -->
+        <div id="alan-evet" class="hidden" style="margin-top:10px">
+          <label for="gorus">Evet ise: Güncel yayınlarımız hakkında görüşlerinizi paylaşır mısınız?</label>
+          <textarea id="gorus" name="gorus" maxlength="800" placeholder="Beğendiğiniz / geliştirilmesini istediğiniz noktalar..."></textarea>
+          <div class="counter"><span id="gorusCount">0</span>/800</div>
+        </div>
+
+        <div id="alan-hayir" class="hidden" style="margin-top:10px">
+          <label for="istek">Hayır ise: Hangi tür programların olmasını istersiniz?</label>
+          <textarea id="istek" name="istek" maxlength="800" placeholder="Örn. belgesel, kültür-sanat, çocuk, teknoloji, göçmenlik rehberi..."></textarea>
+          <div class="counter"><span id="istekCount">0</span>/800</div>
+        </div>
+      </fieldset>
+
+      <div class="hr"></div>
+
+      <!-- GENEL GERİ BİLDİRİM: İstenen yeni birleşik alan -->
+      <div class="section-title"><span class="dot"></span> Genel Geri Bildirim</div>
+      <div class="field">
+        <label for="yorum">Güncel yayınlarımız hakkındaki görüşlerinizi ve ekranlarımızda görmek istediğiniz program önerilerinizi paylaşabilirsiniz</label>
+        <textarea id="yorum" name="yorum" maxlength="1000" placeholder="Genel görüş ve önerilerinizi buraya yazabilirsiniz..."></textarea>
+        <div class="counter"><span id="yorumCount">0</span>/1000</div>
+      </div>
+
+      <div class="hr"></div>
+
+      <!-- Takip kanalı -->
+      <div class="section-title"><span class="dot"></span> Takip Tercihi</div>
+      <fieldset class="field">
+        <legend><label>5) Bizi daha çok hangi yayın üzerinden takip etmek istersiniz? <span class="req" aria-hidden="true">*</span></label></legend>
+        <div class="inline">
+          <label class="chip"><input type="radio" name="kanal" value="YouTube" required /> YouTube</label>
+          <label class="chip"><input type="radio" name="kanal" value="Omni 2 TV kanalı" /> Omni 2 TV kanalı</label>
+          <label class="chip"><input type="radio" name="kanal" value="Diğer" /> Diğer</label>
+        </div>
+        <div class="error" id="err-kanal" role="alert" aria-live="polite"></div>
+        <div id="kanal-diger" class="hidden" style="margin-top:10px">
+          <label for="kanalDiger">Diğer platform:</label>
+          <input id="kanalDiger" name="kanalDiger" type="text" placeholder="Örn. Instagram, Facebook, Web sitesi..." />
+        </div>
+      </fieldset>
+
+      <div class="hr"></div>
+
+      <!-- Gönüllü -->
+      <div class="section-title"><span class="dot"></span> Gönüllülük</div>
+      <fieldset class="field">
+        <legend><label>6) Gönüllü ekibimize katılmak ister misiniz? (İlgilendiğiniz alanı işaretleyiniz)</label></legend>
+        <div class="inline" role="group" aria-label="Gönüllü Alanları">
+          <label class="chip"><input type="checkbox" name="gonullu" value="Kamera" /> Kamera</label>
+          <label class="chip"><input type="checkbox" name="gonullu" value="Montaj" /> Montaj</label>
+          <label class="chip"><input type="checkbox" name="gonullu" value="Reklam & Sponsor" /> Reklam &amp; Sponsor</label>
+          <label class="chip"><input type="checkbox" name="gonullu" value="Röportaj" /> Röportaj</label>
+          <label class="chip"><input type="checkbox" name="gonullu" value="Katılmak istemiyorum" /> Katılmak istemiyorum</label>
+        </div>
+      </fieldset>
+
+      <div class="hr"></div>
+
+      <!-- İletişim izni -->
+      <div class="field">
+        <label class="muted">
+          <input type="checkbox" id="izin" required /> Turkuaz TV’nin iletişim bilgilerimi anket geri bildirimi ve bilgilendirme amaçlı kullanmasına izin veriyorum.
+          <span class="req" aria-hidden="true">*</span>
+        </label>
+        <div class="error" id="err-izin" role="alert" aria-live="polite"></div>
+      </div>
+
+      <!-- Honeypot (antispam) -->
+      <div class="sr-only" aria-hidden="true">
+        <label for="web_site">Web siteniz</label>
+        <input id="web_site" name="web_site" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="primary">Gönder</button>
+        <button type="reset" class="ghost">Temizle</button>
+      </div>
+
+      <div id="success" class="success" role="status" aria-live="polite">
+        Teşekkürler! Yanıtınız alındı. <span class="muted">Bu, demo amaçlı yerel bir onaydır. Canlı toplama için aşağıdaki açıklamaya bakınız.</span>
+      </div>
+
+      <div class="note">
+        <strong>Nasıl canlıya alırım?</strong><br/>
+        • Bu dosyayı bir sunucuya yükleyip <code>&lt;form&gt;</code> etiketine bir <code>action</code> ekleyin (ör. Google Forms, Formspree, Netlify Forms).<br/>
+        • Örnek: <code>&lt;form action="https://formspree.io/f/XXXX" method="POST"&gt;</code>.<br/>
+        • Alan adları, isimleri ve değerleri aynen kalabilir.
+      </div>
+    </form>
+
+    <footer>
+      © <span id="yil"></span> Turkuaz TV • Tasarım Şablonu
+    </footer>
+  </div>
+
+  <script>
+    (function(){
+      const $ = (s, root=document) => root.querySelector(s);
+      const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
+
+      const form = $('#anketForm');
+      const success = $('#success');
+      const yil = $('#yil'); yil.textContent = new Date().getFullYear();
+
+      // Koşullu alanlar (Evet/Hayır)
+      const alanEvet = $('#alan-evet');
+      const alanHayir = $('#alan-hayir');
+      $$('input[name="izledi"]').forEach(r => {
+        r.addEventListener('change', () => {
+          if(r.checked && r.value === 'Evet'){
+            alanEvet.classList.remove('hidden');
+            alanHayir.classList.add('hidden');
+          } else if (r.checked && r.value === 'Hayır'){
+            alanHayir.classList.remove('hidden');
+            alanEvet.classList.add('hidden');
+          }
+        });
+      });
+
+      // "Diğer" kanal seçimi
+      const kanalDigerWrap = $('#kanal-diger');
+      $$('input[name="kanal"]').forEach(r => {
+        r.addEventListener('change', () => {
+          if(r.checked && r.value === 'Diğer'){
+            kanalDigerWrap.classList.remove('hidden');
+          } else {
+            kanalDigerWrap.classList.add('hidden');
+          }
+        });
+      });
+
+      // Sayaçlar
+      const gorus = $('#gorus'), istek = $('#istek'), yorum = $('#yorum');
+      function updateCounter(el, id){
+        if(!el) return;
+        const max = el.getAttribute('maxlength') || 0;
+        const len = el.value.length;
+        const c = $('#'+id);
+        if(c) c.textContent = len;
+        if(max && len >= max) el.setCustomValidity('Maksimum karaktere ulaştınız.');
+        else el.setCustomValidity('');
+      }
+      if(gorus) gorus.addEventListener('input', ()=>updateCounter(gorus,'gorusCount'));
+      if(istek) istek.addEventListener('input', ()=>updateCounter(istek,'istekCount'));
+      if(yorum) yorum.addEventListener('input', ()=>updateCounter(yorum,'yorumCount'));
+      updateCounter(gorus,'gorusCount');
+      updateCounter(istek,'istekCount');
+      updateCounter(yorum,'yorumCount');
+
+      // Hata gösterme
+      function showError(id, msg){
+        const el = $('#'+id);
+        if(el) el.textContent = msg || '';
+      }
+      function validate(){
+        let ok = true;
+        if(!$('#adsoyad').value.trim()){ showError('err-adsoyad','Lütfen ad soyad giriniz.'); ok=false; }
+        else showError('err-adsoyad','');
+
+        const em = $('#email').value.trim();
+        const re = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/i;
+        if(!em){ showError('err-email','Lütfen e-mail giriniz.'); ok=false; }
+        else if(!re.test(em)){ showError('err-email','Geçerli bir e-mail giriniz.'); ok=false; }
+        else showError('err-email','');
+
+        if(!$('#yas').value){ showError('err-yas','Lütfen yaş aralığı seçiniz.'); ok=false; }
+        else showError('err-yas','');
+
+        const iz = $$('input[name="izledi"]:checked');
+        if(!iz.length){ showError('err-izledi','Bu alan zorunludur.'); ok=false; }
+        else showError('err-izledi','');
+
+        const kn = $$('input[name="kanal"]:checked');
+        if(!kn.length){ showError('err-kanal','Lütfen bir seçenek işaretleyiniz.'); ok=false; }
+        else showError('err-kanal','');
+
+        if(!$('#izin').checked){ showError('err-izin','İletişim izni gereklidir.'); ok=false; }
+        else showError('err-izin','');
+
+        if($('#web_site').value.trim()!==''){ ok=false; } // honeypot
+        return ok;
+      }
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        if(validate()){
+          success.style.display = 'block';
+          form.reset();
+          // Koşullu alanları gizle
+          alanEvet.classList.add('hidden');
+          alanHayir.classList.add('hidden');
+          // Sayaçları sıfırla
+          updateCounter($('#gorus'),'gorusCount');
+          updateCounter($('#istek'),'istekCount');
+          updateCounter($('#yorum'),'yorumCount');
+          window.scrollTo({top:0, behavior:'smooth'});
+        } else {
+          success.style.display = 'none';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
